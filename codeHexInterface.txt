@@ -1,0 +1,19 @@
+String numb ="";
+				String[] hexNumber = {"10","11","12","13","14","15"};
+				if(command.equals("A")) {
+					numb = hexNumber[0];
+				if(command.equals("B")) {
+					numb = hexNumber[1];
+				if (command.equals("C")) {
+					numb = hexNumber [2];
+				if (command.equals("D")) {
+					numb = hexNumber [3];
+				if (command.equals("E")) {
+					numb = hexNumber [4];
+				if (command.equals("F")) {
+					numb = hexNumber [5];
+				}
+				}
+				}
+				 number = Integer.parseInt(numb);
+			}
