@@ -85,7 +85,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 
 	private void hexConverter() {
 		length = hexWord.length();
-		if ((command.equals("=") || command.equals("+") || command.equals("-") || command.equals("*")) && length != 0) {
+		if ((command.equals("=") || command.equals("+") || command.equals("-") || command.equals("*"))) {
 			hexDigits = new String[length];
 			
 			int i = 0;
