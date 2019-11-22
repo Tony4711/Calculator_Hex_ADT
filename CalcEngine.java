@@ -155,10 +155,10 @@ public class CalcEngine {
 		// then it is an error, unless we have just calculated a
 		// result using '='.
 
-		if (operator == '-' && !(haveLeftOperand && lastOperator == '?')) {
+		/*if (operator == '-' && !(haveLeftOperand && lastOperator == '?')) {
 			displayValue -= displayValue*2;
 		}		
-		else if (!buildingDisplayValue && !(haveLeftOperand && lastOperator == '?')) {
+		else */if (!buildingDisplayValue && !(haveLeftOperand && lastOperator == '?')) {
 			keySequenceError();
 			return;
 		}

@@ -19,6 +19,7 @@ public class UserInterface implements ActionListener {
 	protected JTextField display;
 	private JLabel status;
 	protected JPanel buttonPanel;
+	protected JPanel contentPane;
 
 	/**
 	 * Create a user interface.
@@ -47,18 +48,18 @@ public class UserInterface implements ActionListener {
 	private void makeFrame() {
 		frame = new JFrame(calc.getTitle());
 
-		JPanel contentPane = (JPanel) frame.getContentPane();
+		contentPane = (JPanel) frame.getContentPane();
 		contentPane.setLayout(new BorderLayout(8, 8));
 		contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
 
 		display = new JTextField();
 		contentPane.add(display, BorderLayout.NORTH);
 
-		buttonPanel = new JPanel(new GridLayout(7, 4));
+		buttonPanel = new JPanel(new GridLayout(6, 4));
 		addButton(buttonPanel, "7");
 		addButton(buttonPanel, "8");
 		addButton(buttonPanel, "9");
-		addButton(buttonPanel, "c");
+		addButton(buttonPanel, "CE");
 
 		addButton(buttonPanel, "4");
 		addButton(buttonPanel, "5");
@@ -122,7 +123,7 @@ public class UserInterface implements ActionListener {
 			calc.minus();
 		} else if (command.equals("=")) {
 			calc.equals();
-		} else if (command.equals("C")) {
+		} else if (command.equals("CE")) {
 			calc.clear();
 		} else if (command.equals("?")) {
 			showInfo();
