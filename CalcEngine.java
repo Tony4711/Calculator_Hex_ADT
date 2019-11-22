@@ -20,7 +20,7 @@ public class CalcEngine {
 	private int displayValue;
 	// The value of an existing left operand.
 	private int leftOperand;
-
+	
 	/**
 	 * Create a CalcEngine.
 	 */
@@ -46,7 +46,7 @@ public class CalcEngine {
 		if (buildingDisplayValue) {
 			// Incorporate this digit.
 			displayValue = displayValue * 10 + number;
-		} else {
+		}else {
 			// Start building a new number.
 			displayValue = number;
 			buildingDisplayValue = true;
@@ -185,4 +185,12 @@ public class CalcEngine {
 		// Reset everything.
 		clear();
 	}
+	
+	protected void maxIntReachead() {
+		System.out.println("You can only input numbers with a maximum of 9 digits.");
+		// Reset everything.
+		clear();
+		System.out.println("Your input got reseted.");
+	}
+	
 }

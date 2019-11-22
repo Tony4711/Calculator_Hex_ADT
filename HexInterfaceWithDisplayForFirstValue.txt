@@ -15,7 +15,8 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 	private int hex = 0;
 	private int a;
 	private int length = 0;
-
+	private boolean empty = true;
+	private boolean calculate;
 
 	protected HexaUserInterface(CalcEngine engine) {
 		super(engine);
@@ -48,6 +49,10 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 			setPanelEnabled(hexButtonPanel, true);
 			hexConverter();
 		} else {
+			if(empty) { 
+				calculate = true;
+				hexConverter();
+			}
 			setPanelEnabled(hexButtonPanel, false);
 			calculateDeci();
 		}
@@ -67,6 +72,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 		else if (command.equals("DEL")) {
 			hexWord = "";
 			hexToDezi = 0;
+			display.setText("0");
 			calc.clear();
 		} else if (command.equals("?"))
 			showInfo();
@@ -77,7 +83,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 				|| command.equals("4") || command.equals("5") || command.equals("6") || command.equals("7")
 				|| command.equals("8") || command.equals("9")) {
 			hexToDezi = Integer.parseInt(command);
-			calc.numberPressed(hexToDezi);
+			calc.numberPressed(hexToDezi, false);
 			hexToDezi = 0;
 			hexWord = "";
 		}
@@ -85,8 +91,10 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 
 	private void hexConverter() {
 		length = hexWord.length();
-		if ((command.equals("=") || command.equals("+") || command.equals("-") || command.equals("*")) && length != 0) {
+		if ((command.equals("=") || command.equals("+") || command.equals("-") || command.equals("*")) || calculate && length != 0) {
 			hexDigits = new String[length];
+			empty = false;
+			calculate = true;
 			
 			int i = 0;
 			for (int n = length; n > 0; n--) {
@@ -100,7 +108,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 				stringHexToDeci();
 				
 			}
-			calc.numberPressed(hexToDezi);
+			calc.numberPressed(hexToDezi, calculate);
 			hexToDezi = 0;
 			hexWord = "";
 			
@@ -112,6 +120,10 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 					calc.maxIntReachead();
 				else
 					hexWord = hexWord + command;
+				
+				empty =true;
+				if(empty)  
+					display.setText(hexWord);
 			}
 			
 		}
@@ -162,7 +174,8 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 	protected void redisplay() {
 		if (HEX.isSelected() == true) {
 			String hex = (Integer.toHexString(calc.getDisplayValue())).toUpperCase();
-			display.setText("" + hex);
+			if(empty == false)
+				display.setText("" + hex);
 		} else
 			display.setText("" + calc.getDisplayValue());
 	}

@@ -59,7 +59,7 @@ public class UserInterface implements ActionListener {
 		addButton(buttonPanel, "7");
 		addButton(buttonPanel, "8");
 		addButton(buttonPanel, "9");
-		addButton(buttonPanel, "CE");
+		addButton(buttonPanel, "DEL");
 
 		addButton(buttonPanel, "4");
 		addButton(buttonPanel, "5");
@@ -80,9 +80,6 @@ public class UserInterface implements ActionListener {
 		buttonPanel.add(new JLabel(" "));
 		addButton(buttonPanel, "?");
 		addButton(buttonPanel, "=");
-		
-
-		
 
 		contentPane.add(buttonPanel, BorderLayout.CENTER);
 
@@ -123,7 +120,7 @@ public class UserInterface implements ActionListener {
 			calc.minus();
 		} else if (command.equals("=")) {
 			calc.equals();
-		} else if (command.equals("CE")) {
+		} else if (command.equals("DEL")) {
 			calc.clear();
 		} else if (command.equals("?")) {
 			showInfo();
@@ -136,7 +133,7 @@ public class UserInterface implements ActionListener {
 	/**
 	 * Update the interface display to show the current value of the calculator.
 	 */
-	protected void redisplay() {
+	private void redisplay() {
 		display.setText("" + calc.getDisplayValue());
 	}
 
