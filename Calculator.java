@@ -8,7 +8,7 @@
 public class Calculator
 {
     private CalcEngine engine;
-    private UserInterface gui;
+    //private UserInterface gui;
     private HexaUserInterface hexGui;
     
 	public static void main(String[] args) 
