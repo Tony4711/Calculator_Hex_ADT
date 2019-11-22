@@ -95,6 +95,7 @@ public class CalcEngine {
 		haveLeftOperand = false;
 		buildingDisplayValue = false;
 		displayValue = 0;
+		leftOperand = 0;
 	}
 
 	/**

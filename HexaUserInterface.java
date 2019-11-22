@@ -22,7 +22,6 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 	}
 
 	private void addHexInterface() {
-
 		hexButtonPanel = new JPanel(new GridLayout(6, 3));
 		buttonPanel.add(hexButtonPanel);
 		addButton(hexButtonPanel, "F");
@@ -45,9 +44,16 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 		command = event.getActionCommand();
 
 		if (HEX.isSelected() == true) {
+			/*if(command.equals("hex")) {
+				command = "CE";
+				checkOperator();
+			}*/
 			setPanelEnabled(hexButtonPanel, true);
 			hexConverter();
 		} else {
+			/*if(command.equals("hex"))
+				calc.clear();*/
+			
 			setPanelEnabled(hexButtonPanel, false);
 			calculateDeci();
 		}
@@ -78,12 +84,13 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 				|| command.equals("8") || command.equals("9")) {
 			hexToDezi = Integer.parseInt(command);
 			calc.numberPressed(hexToDezi);
+			hexToDezi = 0;
+			hexWord = "";
 		}
 	}
 
 	private void hexConverter() {
 		length = hexWord.length();
-
 		if ((command.equals("=") || command.equals("+") || command.equals("-") || command.equals("*")) && length != 0) {
 			hexDigits = new String[length];
 			
@@ -96,13 +103,16 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 			}
 			for (a = 0; a < hexDigits.length; a++) {
 				digitHexToDeci();
-				StringHexToDeci();
+				stringHexToDeci();
 			}
 			calc.numberPressed(hexToDezi);
 			hexToDezi = 0;
 			hexWord = "";
 		} else if (!(command.equals("=") || command.equals("+") || command.equals("-") || command.equals("*")))
-			hexWord = hexWord + command;
+			if(command.contentEquals("hex"))
+				hexWord = "";
+			else
+				hexWord = hexWord + command;
 	}
 
 	private void digitHexToDeci() {
@@ -114,11 +124,10 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 			length -= 1;
 			hexToDezi = (int) ((Math.pow(16, (length))) * number) + hexToDezi;
 			hexDigits[a] = "0";
-
 		}
 	}
 
-	private void StringHexToDeci() {
+	private void stringHexToDeci() {
 		if (hexDigits[a].equals("A") || hexDigits[a].equals("B") || hexDigits[a].equals("C")
 				|| hexDigits[a].equals("D") || hexDigits[a].equals("E") || hexDigits[a].equals("F")) {
 			switch (hexDigits[a]) {
@@ -170,7 +179,6 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 			if (components[i].getClass().getName() == "javax.swing.JPanel") {
 				setPanelEnabled((JPanel) components[i], isEnabled);
 			}
-
 			components[i].setEnabled(isEnabled);
 		}
 	}
