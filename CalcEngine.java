@@ -10,7 +10,7 @@ public class CalcEngine {
 
 	// Are we already building a value in the display, or will the
 	// next digit be the first of a new one?
-	protected boolean buildingDisplayValue;
+	private boolean buildingDisplayValue;
 	// Has a left operand already been entered (or calculated)?
 	private boolean haveLeftOperand;
 	// The most recent operator that was entered.
@@ -83,11 +83,6 @@ public class CalcEngine {
 	public void multi() {
 		applyOperator('*');
 	}
-	
-	public void div() {
-		applyOperator('/');
-	}
-
 	/**
 	 * The '=' button was pressed.
 	 */
@@ -153,11 +148,6 @@ public class CalcEngine {
 			break;
 		case '*':
 			displayValue = leftOperand * displayValue;
-			haveLeftOperand = true;
-			leftOperand = displayValue;
-			break;
-		case '/':
-			displayValue = leftOperand / displayValue;
 			haveLeftOperand = true;
 			leftOperand = displayValue;
 			break;
