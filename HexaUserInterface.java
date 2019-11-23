@@ -17,7 +17,6 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 	private int a;
 	private int length = 0;
 
-
 	protected HexaUserInterface(CalcEngine engine) {
 		super(engine);
 		addHexInterface();
@@ -27,7 +26,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 		checkBoxPanel = new JPanel(new GridLayout(1, 1));
 		hexButtonPanel = new JPanel(new GridLayout(6, 3));
 		buttonPanel.add(hexButtonPanel);
-		
+
 		addButton(hexButtonPanel, "F");
 		addButton(hexButtonPanel, "E");
 		addButton(hexButtonPanel, "D");
@@ -61,7 +60,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 		checkOperator();
 		redisplay();
 	}
-	
+
 	private void checkOperator() {
 		if (command.equals("*"))
 			calc.multi();
@@ -93,7 +92,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 		length = hexWord.length();
 		if ((command.equals("=") || command.equals("+") || command.equals("-") || command.equals("*"))) {
 			hexDigits = new String[length];
-			
+
 			int i = 0;
 			for (int n = length; n > 0; n--) {
 				int end = (length - n) + 1;
@@ -104,30 +103,25 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 			for (a = 0; a < hexDigits.length; a++) {
 				digitHexToDeci();
 				stringHexToDeci();
-				
 			}
-			
 			hexToDezi = 0;
 			hexWord = "";
-			
 		} else {
-			if(command.equals("hex"))
+			if (command.equals("hex"))
 				hexWord = "";
 			else {
-				if(hexWord.length() == 9)
+				if (hexWord.length() == 9)
 					calc.maxIntReachead();
 				else
 					hexWord = hexWord + command;
 			}
-			
 		}
 	}
 
 	private void digitHexToDeci() {
-		if (hexDigits[a].equals("0") || hexDigits[a].equals("1") || hexDigits[a].equals("2")
-				|| hexDigits[a].equals("3") || hexDigits[a].equals("4") || hexDigits[a].equals("5")
-				|| hexDigits[a].equals("6") || hexDigits[a].equals("7") || hexDigits[a].equals("8")
-				|| hexDigits[a].equals("9")) {
+		if (hexDigits[a].equals("0") || hexDigits[a].equals("1") || hexDigits[a].equals("2") || hexDigits[a].equals("3")
+				|| hexDigits[a].equals("4") || hexDigits[a].equals("5") || hexDigits[a].equals("6")
+				|| hexDigits[a].equals("7") || hexDigits[a].equals("8") || hexDigits[a].equals("9")) {
 			int number = Integer.parseInt(hexDigits[a]);
 			length -= 1;
 			hexToDezi = (int) ((Math.pow(16, (length))) * number) + hexToDezi;
@@ -137,8 +131,8 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 	}
 
 	protected void stringHexToDeci() {
-		if (hexDigits[a].equals("A") || hexDigits[a].equals("B") || hexDigits[a].equals("C")
-				|| hexDigits[a].equals("D") || hexDigits[a].equals("E") || hexDigits[a].equals("F")) {
+		if (hexDigits[a].equals("A") || hexDigits[a].equals("B") || hexDigits[a].equals("C") || hexDigits[a].equals("D")
+				|| hexDigits[a].equals("E") || hexDigits[a].equals("F")) {
 			switch (hexDigits[a]) {
 			case "A":
 				hex = hexNumber[0];
@@ -167,27 +161,25 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 	}
 
 	protected void redisplay() {
-		if(calc.getErrorChar() == '!') {
+		if (calc.getErrorChar() == '!') {
 			display.setText("Max 9 digits allowed");
 			calc.setErrorChar('?');
-			
-		}
-		else if(calc.getErrorChar() == '~') {
+		} else if (calc.getErrorChar() == '~') {
 			display.setText("A key sequence error has occurred.");
 			calc.setErrorChar('?');
-		}
-		else {
-		if (HEX.isSelected() == true) {
-			String hex = (Integer.toHexString(calc.getDisplayValue())).toUpperCase();
-			display.setText("" + hex);
-		} else
-			display.setText("" + calc.getDisplayValue());
+		} else {
+			if (HEX.isSelected() == true) {
+				String hex = (Integer.toHexString(calc.getDisplayValue())).toUpperCase();
+				display.setText("" + hex);
+			} else
+				display.setText("" + calc.getDisplayValue());
 		}
 	}
 
 	/*
 	 * From Stack Overflow
-	 * https://stackoverflow.com/questions/10985734/java-swing-enabling-disabling-all-components-in-jpanel
+	 * https://stackoverflow.com/questions/10985734/java-swing-enabling-disabling-
+	 * all-components-in-jpanel
 	 * @author Kesavamoorthi
 	 */
 	void setPanelEnabled(JPanel panel, Boolean isEnabled) {
