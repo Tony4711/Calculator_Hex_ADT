@@ -15,11 +15,12 @@ public class CalcEngine {
 	private boolean haveLeftOperand;
 	// The most recent operator that was entered.
 	private char lastOperator;
-
+	private char errorChar;
 	// The current value (to be) shown in the display.
 	private int displayValue;
 	// The value of an existing left operand.
 	private int leftOperand;
+	private int MAX_INT = 999999999;
 	
 	/**
 	 * Create a CalcEngine.
@@ -35,6 +36,14 @@ public class CalcEngine {
 	public int getDisplayValue() {
 		return displayValue;
 	}
+	
+	public char getErrorChar() {
+		return errorChar;
+	}
+	
+	public void setErrorChar(char error) {
+		errorChar = error;
+	}
 
 	/**
 	 * A number button was pressed. Either start a new operand, or incorporate this
@@ -44,8 +53,12 @@ public class CalcEngine {
 	 */
 	public void numberPressed(int number) {
 		if (buildingDisplayValue) {
+			if(!(displayValue * 10 > MAX_INT)) {
 			// Incorporate this digit.
 			displayValue = displayValue * 10 + number;
+			}
+			else
+				maxIntReachead();
 		}else {
 			// Start building a new number.
 			displayValue = number;
@@ -69,6 +82,10 @@ public class CalcEngine {
 	
 	public void multi() {
 		applyOperator('*');
+	}
+	
+	public void div() {
+		applyOperator('/');
 	}
 
 	/**
@@ -95,7 +112,6 @@ public class CalcEngine {
 		haveLeftOperand = false;
 		buildingDisplayValue = false;
 		displayValue = 0;
-		leftOperand = 0;
 	}
 
 	/**
@@ -140,6 +156,11 @@ public class CalcEngine {
 			haveLeftOperand = true;
 			leftOperand = displayValue;
 			break;
+		case '/':
+			displayValue = leftOperand / displayValue;
+			haveLeftOperand = true;
+			leftOperand = displayValue;
+			break;
 		default:
 			keySequenceError();
 			break;
@@ -156,10 +177,10 @@ public class CalcEngine {
 		// then it is an error, unless we have just calculated a
 		// result using '='.
 
-		/*if (operator == '-' && !(haveLeftOperand && lastOperator == '?')) {
+		if (operator == '-' && !haveLeftOperand && lastOperator == '?') {
 			displayValue -= displayValue*2;
 		}		
-		else */if (!buildingDisplayValue && !(haveLeftOperand && lastOperator == '?')) {
+		else if (!buildingDisplayValue && !(haveLeftOperand && lastOperator == '?')) {
 			keySequenceError();
 			return;
 		}
@@ -181,16 +202,15 @@ public class CalcEngine {
 	 * Report an error in the sequence of keys that was pressed.
 	 */
 	private void keySequenceError() {
-		System.out.println("A key sequence error has occurred.");
+		//System.out.println("A key sequence error has occurred.");
 		// Reset everything.
 		clear();
+		errorChar = '!';
 	}
 	
 	protected void maxIntReachead() {
-		System.out.println("You can only input numbers with a maximum of 9 digits.");
-		// Reset everything.
-		clear();
-		System.out.println("Your input got reseted.");
+		errorChar = '~';
+		displayValue = 0;
 	}
 	
 }

@@ -64,21 +64,25 @@ public class UserInterface implements ActionListener {
 		addButton(buttonPanel, "4");
 		addButton(buttonPanel, "5");
 		addButton(buttonPanel, "6");
-		addButton(buttonPanel, "*");
+		addButton(buttonPanel, "/");
 
 		addButton(buttonPanel, "1");
 		addButton(buttonPanel, "2");
 		addButton(buttonPanel, "3");
-		addButton(buttonPanel, "-");
+		addButton(buttonPanel, "*");
 		
 		buttonPanel.add(new JLabel(" "));
 		addButton(buttonPanel, "0");
 		buttonPanel.add(new JLabel(" "));
 		
-		addButton(buttonPanel, "+");
+		addButton(buttonPanel, "-");
 		buttonPanel.add(new JLabel(" "));
 		buttonPanel.add(new JLabel(" "));
 		addButton(buttonPanel, "?");
+		addButton(buttonPanel, "+");
+		buttonPanel.add(new JLabel(" "));
+		buttonPanel.add(new JLabel(" "));
+		buttonPanel.add(new JLabel(" "));
 		addButton(buttonPanel, "=");
 
 		contentPane.add(buttonPanel, BorderLayout.CENTER);

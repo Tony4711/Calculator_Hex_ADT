@@ -8,6 +8,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 	protected String hexWord = "";
 	protected int hexToDezi = 0;
 	private JPanel hexButtonPanel;
+	private JPanel checkBoxPanel;
 	private JToggleButton HEX;
 	private String[] hexDigits;
 	private String command;
@@ -23,6 +24,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 	}
 
 	private void addHexInterface() {
+		checkBoxPanel = new JPanel(new GridLayout(1, 1));
 		hexButtonPanel = new JPanel(new GridLayout(6, 3));
 		buttonPanel.add(hexButtonPanel);
 		
@@ -34,9 +36,14 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 		addButton(hexButtonPanel, "A");
 
 		HEX = new JCheckBox("hex", true);
-		buttonPanel.add(HEX);
+		checkBoxPanel.add(new JLabel(" "));
+		checkBoxPanel.add(new JLabel(" "));
+		checkBoxPanel.add(new JLabel(" "));
+		checkBoxPanel.add(new JLabel(" "));
+		checkBoxPanel.add(HEX);
 		HEX.addActionListener(this);
 		contentPane.add(hexButtonPanel, BorderLayout.WEST);
+		contentPane.add(checkBoxPanel, BorderLayout.SOUTH);
 
 		frame.pack();
 	}
@@ -79,7 +86,6 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 			hexToDezi = Integer.parseInt(command);
 			calc.numberPressed(hexToDezi);
 			hexToDezi = 0;
-			hexWord = "";
 		}
 	}
 
@@ -100,7 +106,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 				stringHexToDeci();
 				
 			}
-			calc.numberPressed(hexToDezi);
+			
 			hexToDezi = 0;
 			hexWord = "";
 			
@@ -126,6 +132,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 			length -= 1;
 			hexToDezi = (int) ((Math.pow(16, (length))) * number) + hexToDezi;
 			hexDigits[a] = "0";
+			calc.numberPressed(hexToDezi);
 		}
 	}
 
@@ -152,19 +159,30 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 				hex = hexNumber[5];
 				break;
 			}
-
 			length -= 1;
 			hexToDezi = (int) ((Math.pow(16, (length))) * hex) + hexToDezi;
 			hexDigits[a] = "0";
+			calc.numberPressed(hexToDezi);
 		}
 	}
 
 	protected void redisplay() {
+		if(calc.getErrorChar() == '!') {
+			display.setText("Max 9 digits allowed");
+			calc.setErrorChar('?');
+			
+		}
+		else if(calc.getErrorChar() == '~') {
+			display.setText("A key sequence error has occurred.");
+			calc.setErrorChar('?');
+		}
+		else {
 		if (HEX.isSelected() == true) {
 			String hex = (Integer.toHexString(calc.getDisplayValue())).toUpperCase();
 			display.setText("" + hex);
 		} else
 			display.setText("" + calc.getDisplayValue());
+		}
 	}
 
 	/*
