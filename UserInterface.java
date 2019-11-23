@@ -80,6 +80,7 @@ public class UserInterface implements ActionListener {
 		buttonPanel.add(new JLabel(" "));
 		addButton(buttonPanel, "?");
 		addButton(buttonPanel, "=");
+		addButton(buttonPanel, "+/-");
 
 		contentPane.add(buttonPanel, BorderLayout.CENTER);
 

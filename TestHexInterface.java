@@ -61,5 +61,16 @@ class TestHexInterface {
 		test = 0;
 		
 	}
+	
+	@Test
+	void testCheckBox() {
+		
+		engine = new CalcEngine();
+		hexGui = new HexaUserInterface(engine);
+		event = new ActionEvent(hexGui, 0, "HEX");
+		int test = hexGui.calc.getDisplayValue();
+		assertEquals(0, test);
+		hexGui.actionPerformed(event);
+	}
 
 }

@@ -58,7 +58,7 @@ public class CalcEngine {
 			displayValue = displayValue * 10 + number;
 			}
 			else
-				maxIntReachead();
+				maxIntReached();
 		}else {
 			// Start building a new number.
 			displayValue = number;
@@ -166,15 +166,10 @@ public class CalcEngine {
 		// If we are not in the process of building a new operand
 		// then it is an error, unless we have just calculated a
 		// result using '='.
-
-		if (operator == '-' && !haveLeftOperand && lastOperator == '?') {
-			displayValue -= displayValue*2;
-		}		
-		else if (!buildingDisplayValue && !(haveLeftOperand && lastOperator == '?')) {
+		if (!buildingDisplayValue && !(haveLeftOperand && lastOperator == '?')) {
 			keySequenceError();
 			return;
 		}
-
 		if (lastOperator != '?') {
 			// First apply the previous operator.
 			calculateResult();
@@ -187,6 +182,10 @@ public class CalcEngine {
 		lastOperator = operator;
 		buildingDisplayValue = false;
 	}
+	
+	protected void negate() {
+		displayValue -= displayValue*2;
+	}
 
 	/**
 	 * Report an error in the sequence of keys that was pressed.
@@ -198,7 +197,7 @@ public class CalcEngine {
 		errorChar = '!';
 	}
 	
-	protected void maxIntReachead() {
+	protected void maxIntReached() {
 		errorChar = '~';
 		displayValue = 0;
 	}

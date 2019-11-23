@@ -50,7 +50,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
 		command = event.getActionCommand();
 
-		if (HEX.isSelected() == true) {
+		if (HEX.isSelected()) {
 			setPanelEnabled(hexButtonPanel, true);
 			hexConverter();
 		} else {
@@ -76,6 +76,10 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 			calc.clear();
 		} else if (command.equals("?"))
 			showInfo();
+		else if (command.equals("+/-")) {
+			calc.negate();
+			hexWord = "";
+		}
 	}
 
 	private void calculateDeci() {
@@ -111,7 +115,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 				hexWord = "";
 			else {
 				if (hexWord.length() == 9)
-					calc.maxIntReachead();
+					calc.maxIntReached();
 				else
 					hexWord = hexWord + command;
 			}
@@ -161,10 +165,10 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 	}
 
 	protected void redisplay() {
-		if (calc.getErrorChar() == '!') {
+		if (calc.getErrorChar() == '~') {
 			display.setText("Max 9 digits allowed");
 			calc.setErrorChar('?');
-		} else if (calc.getErrorChar() == '~') {
+		} else if (calc.getErrorChar() == '!') {
 			display.setText("A key sequence error has occurred.");
 			calc.setErrorChar('?');
 		} else {
