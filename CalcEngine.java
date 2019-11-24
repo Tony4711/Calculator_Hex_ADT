@@ -20,8 +20,9 @@ public class CalcEngine {
 	private int displayValue;
 	// The value of an existing left operand.
 	private int leftOperand;
-	private int MAX_INT = 999999999;
-	
+	// Keep it simple and a buffer of more then a million to Integer.MAX_VALUE
+	private boolean hasResult;
+
 	/**
 	 * Create a CalcEngine.
 	 */
@@ -36,11 +37,19 @@ public class CalcEngine {
 	public int getDisplayValue() {
 		return displayValue;
 	}
-	
+
+	public int getleftOperand() {
+		return leftOperand;
+	}
+
+	public boolean getHasResult() {
+		return hasResult;
+	}
+
 	public char getErrorChar() {
 		return errorChar;
 	}
-	
+
 	public void setErrorChar(char error) {
 		errorChar = error;
 	}
@@ -53,13 +62,11 @@ public class CalcEngine {
 	 */
 	public void numberPressed(int number) {
 		if (buildingDisplayValue) {
-			if(!(displayValue * 10 > MAX_INT)) {
-			// Incorporate this digit.
-			displayValue = displayValue * 10 + number;
-			}
-			else
+			if ((displayValue == 214748364 && number > 7) || displayValue > Integer.MAX_VALUE) {
 				maxIntReached();
-		}else {
+			} else
+				displayValue = displayValue * 10 + number; // Incorporate this digit.
+		} else {
 			// Start building a new number.
 			displayValue = number;
 			buildingDisplayValue = true;
@@ -79,10 +86,11 @@ public class CalcEngine {
 	public void minus() {
 		applyOperator('-');
 	}
-	
+
 	public void multi() {
 		applyOperator('*');
 	}
+
 	/**
 	 * The '=' button was pressed.
 	 */
@@ -94,6 +102,7 @@ public class CalcEngine {
 			calculateResult();
 			lastOperator = '?';
 			buildingDisplayValue = false;
+			hasResult = true;
 		} else {
 			keySequenceError();
 		}
@@ -107,6 +116,7 @@ public class CalcEngine {
 		haveLeftOperand = false;
 		buildingDisplayValue = false;
 		displayValue = 0;
+		hasResult = false;
 	}
 
 	/**
@@ -137,19 +147,31 @@ public class CalcEngine {
 	private void calculateResult() {
 		switch (lastOperator) {
 		case '+':
-			displayValue = leftOperand + displayValue;
-			haveLeftOperand = true;
-			leftOperand = displayValue;
+			if (leftOperand + displayValue > Integer.MAX_VALUE) {
+				maxIntReached();
+			} else {
+				displayValue = leftOperand + displayValue;
+				haveLeftOperand = true;
+				leftOperand = displayValue;
+			}
 			break;
 		case '-':
-			displayValue = leftOperand - displayValue;
-			haveLeftOperand = true;
-			leftOperand = displayValue;
+			if (leftOperand - displayValue > Integer.MIN_VALUE) {
+				maxIntReached();
+			} else {
+				displayValue = leftOperand - displayValue;
+				haveLeftOperand = true;
+				leftOperand = displayValue;
+			}
 			break;
 		case '*':
-			displayValue = leftOperand * displayValue;
-			haveLeftOperand = true;
-			leftOperand = displayValue;
+			if ((leftOperand - displayValue > Integer.MIN_VALUE) || (leftOperand + displayValue > Integer.MAX_VALUE)) {
+				maxIntReached();
+			} else {
+				displayValue = leftOperand * displayValue;
+				haveLeftOperand = true;
+				leftOperand = displayValue;
+			}
 			break;
 		default:
 			keySequenceError();
@@ -182,24 +204,25 @@ public class CalcEngine {
 		lastOperator = operator;
 		buildingDisplayValue = false;
 	}
-	
+
 	protected void negate() {
-		displayValue -= displayValue*2;
+		displayValue -= displayValue * 2;
 	}
 
 	/**
 	 * Report an error in the sequence of keys that was pressed.
 	 */
 	private void keySequenceError() {
-		//System.out.println("A key sequence error has occurred.");
+		// System.out.println("A key sequence error has occurred.");
 		// Reset everything.
 		clear();
 		errorChar = '!';
 	}
-	
+
 	protected void maxIntReached() {
+		clear();
 		errorChar = '~';
-		displayValue = 0;
+		// displayValue = 0;
 	}
-	
+
 }

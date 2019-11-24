@@ -16,6 +16,8 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 	private int hex = 0;
 	private int a;
 	private int length = 0;
+	private int oldValue;
+	private boolean hexComplete;
 
 	protected HexaUserInterface(CalcEngine engine) {
 		super(engine);
@@ -61,27 +63,6 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 		redisplay();
 	}
 
-	private void checkOperator() {
-		if (command.equals("*"))
-			calc.multi();
-		else if (command.equals("+"))
-			calc.plus();
-		else if (command.equals("-"))
-			calc.minus();
-		else if (command.equals("="))
-			calc.equals();
-		else if (command.equals("DEL")) {
-			hexWord = "";
-			hexToDezi = 0;
-			calc.clear();
-		} else if (command.equals("?"))
-			showInfo();
-		else if (command.equals("+/-")) {
-			calc.negate();
-			hexWord = "";
-		}
-	}
-
 	private void calculateDeci() {
 		if (command.equals("0") || command.equals("1") || command.equals("2") || command.equals("3")
 				|| command.equals("4") || command.equals("5") || command.equals("6") || command.equals("7")
@@ -96,6 +77,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 		length = hexWord.length();
 		if ((command.equals("=") || command.equals("+") || command.equals("-") || command.equals("*"))) {
 			hexDigits = new String[length];
+			hexComplete = true;
 
 			int i = 0;
 			for (int n = length; n > 0; n--) {
@@ -108,16 +90,22 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 				digitHexToDeci();
 				stringHexToDeci();
 			}
+			if (hexToDezi == 0 && calc.getHasResult())
+				hexToDezi = oldValue;
+			if (!(hexToDezi == 0))
+				calc.numberPressed(hexToDezi);
 			hexToDezi = 0;
 			hexWord = "";
 		} else {
-			if (command.equals("hex"))
+			if (command.equals("hex") || command.equals("+/-"))
 				hexWord = "";
 			else {
 				if (hexWord.length() == 9)
 					calc.maxIntReached();
-				else
+				else {
+					hexComplete = false;
 					hexWord = hexWord + command;
+				}
 			}
 		}
 	}
@@ -130,7 +118,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 			length -= 1;
 			hexToDezi = (int) ((Math.pow(16, (length))) * number) + hexToDezi;
 			hexDigits[a] = "0";
-			calc.numberPressed(hexToDezi);
+
 		}
 	}
 
@@ -160,21 +148,45 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 			length -= 1;
 			hexToDezi = (int) ((Math.pow(16, (length))) * hex) + hexToDezi;
 			hexDigits[a] = "0";
-			calc.numberPressed(hexToDezi);
+
 		}
+	}
+	
+	private void checkOperator() {
+		if (command.equals("*"))
+			calc.multi();
+		else if (command.equals("+"))
+			calc.plus();
+		else if (command.equals("-"))
+			calc.minus();
+		else if (command.equals("=")) {
+			calc.equals();
+			oldValue = calc.getleftOperand();
+		} else if (command.equals("DEL")) {
+			hexWord = "";
+			hexToDezi = 0;
+			calc.clear();
+		} else if (command.equals("?"))
+			showInfo();
+		else if (command.equals("+/-")) 
+			calc.negate();
 	}
 
 	protected void redisplay() {
 		if (calc.getErrorChar() == '~') {
-			display.setText("Max 9 digits allowed");
+			display.setText("Max int value reached");
 			calc.setErrorChar('?');
 		} else if (calc.getErrorChar() == '!') {
 			display.setText("A key sequence error has occurred.");
 			calc.setErrorChar('?');
 		} else {
 			if (HEX.isSelected() == true) {
-				String hex = (Integer.toHexString(calc.getDisplayValue())).toUpperCase();
-				display.setText("" + hex);
+				if (!hexComplete) {
+					display.setText(hexWord);
+				} else {
+					String hex = (Integer.toHexString(calc.getDisplayValue())).toUpperCase();
+					display.setText("" + hex);
+				}
 			} else
 				display.setText("" + calc.getDisplayValue());
 		}
@@ -184,6 +196,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 	 * From Stack Overflow
 	 * https://stackoverflow.com/questions/10985734/java-swing-enabling-disabling-
 	 * all-components-in-jpanel
+	 * 
 	 * @author Kesavamoorthi
 	 */
 	void setPanelEnabled(JPanel panel, Boolean isEnabled) {
