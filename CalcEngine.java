@@ -156,7 +156,7 @@ public class CalcEngine {
 			}
 			break;
 		case '-':
-			if (leftOperand - displayValue > Integer.MIN_VALUE) {
+			if (leftOperand - displayValue < Integer.MIN_VALUE) {
 				maxIntReached();
 			} else {
 				displayValue = leftOperand - displayValue;
@@ -165,7 +165,7 @@ public class CalcEngine {
 			}
 			break;
 		case '*':
-			if ((leftOperand - displayValue > Integer.MIN_VALUE) || (leftOperand + displayValue > Integer.MAX_VALUE)) {
+			if ((leftOperand - displayValue < Integer.MIN_VALUE) || (leftOperand + displayValue > Integer.MAX_VALUE)) {
 				maxIntReached();
 			} else {
 				displayValue = leftOperand * displayValue;

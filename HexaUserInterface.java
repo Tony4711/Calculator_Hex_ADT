@@ -151,7 +151,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 
 		}
 	}
-	
+
 	private void checkOperator() {
 		if (command.equals("*"))
 			calc.multi();
@@ -166,10 +166,10 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 			hexWord = "";
 			hexToDezi = 0;
 			calc.clear();
-		} else if (command.equals("?"))
-			showInfo();
-		else if (command.equals("+/-")) 
+		} else if (command.equals("+/-"))
 			calc.negate();
+		else if (command.equals("?"))
+			showInfo();
 	}
 
 	protected void redisplay() {
