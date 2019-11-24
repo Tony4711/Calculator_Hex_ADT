@@ -222,7 +222,5 @@ public class CalcEngine {
 	protected void maxIntReached() {
 		clear();
 		errorChar = '~';
-		// displayValue = 0;
 	}
-
 }
