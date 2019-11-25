@@ -10,8 +10,14 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 	private JPanel hexButtonPanel;
 	private JPanel checkBoxPanel;
 	private JToggleButton HEX;
+	private String[] hexDigits;
 	private String command;
-	private HexToDecimal hexToDeci;
+	private int[] hexNumber = { 10, 11, 12, 13, 14, 15 };
+	private int hex = 0;
+	private int a;
+	private int length = 0;
+	private int oldValue;
+	private boolean hexComplete;
 
 	protected HexaUserInterface(CalcEngine engine) {
 		super(engine);
@@ -44,30 +50,11 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent event) {
-		hexToDeci = new HexToDeci();
 		command = event.getActionCommand();
-		int dezi = 0;
 
 		if (HEX.isSelected()) {
 			setPanelEnabled(hexButtonPanel, true);
-			if (command.equals("hex"))
-				command = "";
-			else {
-				if (hexWord.length() == 9)
-					calc.maxIntReached();
-				else if (!(command.equals("=") || command.equals("+") || command.equals("-") || command.equals("*")|| command.equals("+/-"))) {
-					hexToDeci.setHexComplete(false);
-					hexWord = hexWord + command;
-				}
-			}
-			if (command.equals("=") || command.equals("+") || command.equals("-") || command.equals("*")) {
-				hexToDeci.setHexComplete(true);
-				dezi = hexToDeci.hexConverter(hexWord, calc.getHasResult());
-				hexWord = "";
-			}
-			if (dezi != 0) {
-				calc.numberPressed(dezi);
-			}
+			hexConverter();
 		} else {
 			setPanelEnabled(hexButtonPanel, false);
 			calculateDeci();
@@ -86,6 +73,85 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 		}
 	}
 
+	private void hexConverter() {
+		length = hexWord.length();
+		if ((command.equals("=") || command.equals("+") || command.equals("-") || command.equals("*"))) {
+			hexDigits = new String[length];
+			hexComplete = true;
+
+			int i = 0;
+			for (int n = length; n > 0; n--) {
+				int end = (length - n) + 1;
+				String h = hexWord.substring(i, end);
+				hexDigits[i] = h;
+				i++;
+			}
+			for (a = 0; a < hexDigits.length; a++) {
+				digitHexToDeci();
+				stringHexToDeci();
+			}
+			if (hexToDezi == 0 && calc.getHasResult())
+				hexToDezi = oldValue;
+			if (!(hexToDezi == 0))
+				calc.numberPressed(hexToDezi);
+			hexToDezi = 0;
+			hexWord = "";
+		} else {
+			if (command.equals("hex") || command.equals("+/-"))
+				hexWord = "";
+			else {
+				if (hexWord.length() == 9)
+					calc.maxIntReached();
+				else {
+					hexComplete = false;
+					hexWord = hexWord + command;
+				}
+			}
+		}
+	}
+
+	private void digitHexToDeci() {
+		if (hexDigits[a].equals("0") || hexDigits[a].equals("1") || hexDigits[a].equals("2") || hexDigits[a].equals("3")
+				|| hexDigits[a].equals("4") || hexDigits[a].equals("5") || hexDigits[a].equals("6")
+				|| hexDigits[a].equals("7") || hexDigits[a].equals("8") || hexDigits[a].equals("9")) {
+			int number = Integer.parseInt(hexDigits[a]);
+			length -= 1;
+			hexToDezi = (int) ((Math.pow(16, (length))) * number) + hexToDezi;
+			hexDigits[a] = "0";
+
+		}
+	}
+
+	protected void stringHexToDeci() {
+		if (hexDigits[a].equals("A") || hexDigits[a].equals("B") || hexDigits[a].equals("C") || hexDigits[a].equals("D")
+				|| hexDigits[a].equals("E") || hexDigits[a].equals("F")) {
+			switch (hexDigits[a]) {
+			case "A":
+				hex = hexNumber[0];
+				break;
+			case "B":
+				hex = hexNumber[1];
+				break;
+			case "C":
+				hex = hexNumber[2];
+				break;
+			case "D":
+				hex = hexNumber[3];
+				break;
+			case "E":
+				hex = hexNumber[4];
+				break;
+			case "F":
+				hex = hexNumber[5];
+				break;
+			}
+			length -= 1;
+			hexToDezi = (int) ((Math.pow(16, (length))) * hex) + hexToDezi;
+			hexDigits[a] = "0";
+
+		}
+	}
+
 	private void checkOperator() {
 		if (command.equals("*"))
 			calc.multi();
@@ -95,7 +161,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 			calc.minus();
 		else if (command.equals("=")) {
 			calc.equals();
-			hexToDeci.setOldValue(calc.getleftOperand());
+			oldValue = calc.getleftOperand();
 		} else if (command.equals("DEL")) {
 			hexWord = "";
 			hexToDezi = 0;
@@ -115,7 +181,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 			calc.setErrorChar('?');
 		} else {
 			if (HEX.isSelected() == true) {
-				if (!hexToDeci.getHexComplete() && hexWord != "") {
+				if (!hexComplete) {
 					display.setText(hexWord);
 				} else {
 					String hex = (Integer.toHexString(calc.getDisplayValue())).toUpperCase();
