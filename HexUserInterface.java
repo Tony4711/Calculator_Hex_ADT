@@ -3,17 +3,17 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class HexaUserInterface extends UserInterface implements ActionListener {
+public class HexUserInterface extends UserInterface implements ActionListener {
 
 	protected String hexWord = "";
 	protected int hexToDezi = 0;
 	private JPanel hexButtonPanel;
 	private JPanel checkBoxPanel;
-	private JToggleButton HEX;
+	protected JToggleButton HEX;
 	private String command;
 	private HexToDecimal hexToDeci;
 
-	protected HexaUserInterface(CalcEngine engine) {
+	protected HexUserInterface(CalcEngine engine) {
 		super(engine);
 		addHexInterface();
 	}
@@ -21,7 +21,6 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 	private void addHexInterface() {
 		checkBoxPanel = new JPanel(new GridLayout(1, 1));
 		hexButtonPanel = new JPanel(new GridLayout(6, 3));
-		buttonPanel.add(hexButtonPanel);
 
 		addButton(hexButtonPanel, "F");
 		addButton(hexButtonPanel, "E");
@@ -47,7 +46,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 		hexToDeci = new HexToDeci();
 		command = event.getActionCommand();
 		int dezi = 0;
-
+		
 		if (HEX.isSelected()) {
 			setPanelEnabled(hexButtonPanel, true);
 			if (command.equals("hex"))
@@ -55,7 +54,8 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 			else {
 				if (hexWord.length() == 9)
 					calc.maxIntReached();
-				else if (!(command.equals("=") || command.equals("+") || command.equals("-") || command.equals("*")|| command.equals("+/-"))) {
+				else if (!(command.equals("=") || command.equals("+") || command.equals("-") || command.equals("*")
+						|| command.equals("+/-"))) {
 					hexToDeci.setHexComplete(false);
 					hexWord = hexWord + command;
 				}
@@ -65,9 +65,8 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 				dezi = hexToDeci.hexConverter(hexWord, calc.getHasResult());
 				hexWord = "";
 			}
-			if (dezi != 0) {
+			if (dezi != 0)
 				calc.numberPressed(dezi);
-			}
 		} else {
 			setPanelEnabled(hexButtonPanel, false);
 			calculateDeci();
@@ -107,7 +106,7 @@ public class HexaUserInterface extends UserInterface implements ActionListener {
 	}
 
 	protected void redisplay() {
-		if (calc.getErrorChar() == '~') {
+		if (calc.getErrorChar() == '>') {
 			display.setText("Max int value reached");
 			calc.setErrorChar('?');
 		} else if (calc.getErrorChar() == '!') {

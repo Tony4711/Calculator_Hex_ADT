@@ -9,7 +9,7 @@ public class Calculator
 {
     private CalcEngine engine;
     //private UserInterface gui;
-    private HexaUserInterface hexGui;
+    private HexUserInterface hexGui;
     
 	public static void main(String[] args) 
 	{
@@ -24,7 +24,7 @@ public class Calculator
     {
         engine = new CalcEngine();
         //gui = new UserInterface(engine);
-        hexGui = new HexaUserInterface(engine);
+        hexGui = new HexUserInterface(engine);
     }
 
     /**

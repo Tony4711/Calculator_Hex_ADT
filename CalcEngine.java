@@ -62,7 +62,10 @@ public class CalcEngine {
 	 */
 	public void numberPressed(int number) {
 		if (buildingDisplayValue) {
-			if ((displayValue == 214748364 && number > 7) || displayValue > Integer.MAX_VALUE) {
+			int display = displayValue;
+			long value = Long.valueOf(display);
+			value = value* 10 + number;
+			if (( value > Integer.MAX_VALUE) || displayValue > Integer.MAX_VALUE) {
 				maxIntReached();
 			} else
 				displayValue = displayValue * 10 + number; // Incorporate this digit.
@@ -145,9 +148,13 @@ public class CalcEngine {
 	 * becomes both the leftOperand and the new display value.
 	 */
 	private void calculateResult() {
+		int display = displayValue;
+		int left = leftOperand;
+		long d = Long.valueOf(display);
+		long l = Long.valueOf(left);
 		switch (lastOperator) {
 		case '+':
-			if (leftOperand + displayValue > Integer.MAX_VALUE) {
+			if (l + d > Integer.MAX_VALUE) {
 				maxIntReached();
 			} else {
 				displayValue = leftOperand + displayValue;
@@ -156,7 +163,7 @@ public class CalcEngine {
 			}
 			break;
 		case '-':
-			if (leftOperand - displayValue < Integer.MIN_VALUE) {
+			if (l - d < Integer.MIN_VALUE) {
 				maxIntReached();
 			} else {
 				displayValue = leftOperand - displayValue;
@@ -165,7 +172,7 @@ public class CalcEngine {
 			}
 			break;
 		case '*':
-			if ((leftOperand - displayValue < Integer.MIN_VALUE) || (leftOperand + displayValue > Integer.MAX_VALUE)) {
+			if ((l * d < Integer.MIN_VALUE) || (l * d > Integer.MAX_VALUE)) {
 				maxIntReached();
 			} else {
 				displayValue = leftOperand * displayValue;
@@ -221,6 +228,6 @@ public class CalcEngine {
 
 	protected void maxIntReached() {
 		clear();
-		errorChar = '~';
+		errorChar = '>';
 	}
 }
